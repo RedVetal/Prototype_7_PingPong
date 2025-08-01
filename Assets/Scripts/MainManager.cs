@@ -22,6 +22,12 @@ public class MainManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Показываем рекорд в UI
+        if (DataManager.Instance != null)
+        {
+            ScoreText.text = $"Score : 0   Best: {DataManager.Instance.HighScoreName} : {DataManager.Instance.HighScore}";
+        }
+
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -72,5 +78,16 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+
+        // Проверяем рекорд
+        if (DataManager.Instance != null)
+        {
+            if (m_Points > DataManager.Instance.HighScore)
+            {
+                DataManager.Instance.HighScore = m_Points;
+                DataManager.Instance.HighScoreName = DataManager.Instance.PlayerName;
+                DataManager.Instance.SaveHighScore();
+            }
+        }
     }
 }
